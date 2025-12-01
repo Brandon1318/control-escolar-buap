@@ -1,0 +1,126 @@
+.wrapper {
+    padding: 5px;
+    font-family: 'Nexa', sans-serif; /* Aseguramos la fuente global */
+}
+
+// Estilo para quitar margenes al mat dialog (esto ayuda si el CSS global no lo cubre)
+::ng-deep .mat-dialog-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 12px !important; // Bordes redondeados del modal
+    overflow: hidden;
+}
+
+.body-modal {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 20px;
+}
+
+.icon-close {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
+
+    .btn {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding: 10px;
+    }
+}
+
+.bi-x-lg {
+    color: #E84150 !important;
+    font-size: 18px !important;
+    font-weight: bold;
+}
+
+.title-modal {
+    text-align: center;
+    font-family: Nexa-Bold, sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: -0.72px;
+    color: #406779;
+    opacity: 1;
+    margin-bottom: 10px;
+}
+
+.descripcion {
+    text-align: center;
+    font-family: Nexa, sans-serif;
+    font-size: 16px;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+    margin-bottom: 25px;
+    line-height: 1.3;
+    padding: 0 10px;
+}
+
+.buttons-modal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: 20px;
+}
+
+// Botón Cancelar (Grisáceo/Blanco)
+.btn-regresar {
+    margin-top: 10px;
+    width: 132px;
+    height: 48px;
+    background: #F6F4F5 0% 0% no-repeat padding-box;
+    box-shadow: 0px 6px 10px #4F480733;
+    border: 1px solid #e0e0e0; // Un poco de borde para definirlo
+    border-radius: 8px;
+    opacity: 1;
+
+    // Fuentes
+    text-align: center;
+    font-family: Nexa-Bold, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0px;
+    color: #E84150 !important; // Texto rojo
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+// Botón Eliminar (Rojo sólido)
+.btn-eliminar {
+    margin-top: 10px;
+    width: 132px;
+    height: 48px;
+    background: #E84150 0% 0% no-repeat padding-box;
+    box-shadow: 0px 12px 20px #4E071433;
+    border: 1px solid #E84150;
+    border-radius: 8px;
+    opacity: 1;
+
+    // Fuentes
+    text-align: center;
+    font-family: Nexa-Bold, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0px;
+    color: #FFFFFF !important; // Texto blanco
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.btn-eliminar:hover {
+    background-color: #ce1626 !important;
+}
+
+.btn-regresar:hover {
+    background-color: #ebebeb;
+}

@@ -1,0 +1,197 @@
+<div class="wrapper">
+  <div class="section-registro">
+
+    <!-- TARJETA SUPERIOR -->
+    <mat-card class="role-card">
+      <div class="role-card-header">
+        <div class="actions-header-colum">
+          <!-- titulo dinamico, cambia según si es edición o registro -->
+          <div class="title-card">{{ editar ? 'Editar Materia' : 'Registro de Materia' }}</div>
+
+          <!-- subtitulo dinamico, cambia según si es edición o registro -->
+          <div class="subtitle-card">
+            {{ editar ? 'Modifica los datos de la materia seleccionada' : 'Ingresa los datos para dar de alta una nueva materia' }}
+          </div>
+        </div>
+        <div class="actions-row">
+          <button mat-icon-button class="back-btn" (click)="regresar()" matTooltip="Regresar">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- icono de materia -->
+      <div class="role-content">
+        <div class="role-pill-static">
+          <div class="radio-circle"></div>
+
+          <div class="info-container">
+            <mat-icon class="role-icon">library_books</mat-icon>
+            <span class="role-text">Materia</span>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- formulario -->
+    <div class="body-registro">
+
+      <!-- Título de Sección -->
+      <div class="row w-100">
+        <div class="col-12">
+          <label class="title-user">
+            {{ editar ? 'Editar Datos de la Materia' : 'Ingresa los Datos de la Materia' }}
+          </label>
+        </div>
+      </div>
+
+      <form>
+        <!-- NRC -->
+        <div class="row w-100">
+          <div class="col-12">
+            <mat-form-field appearance="outline">
+              <mat-label>NRC</mat-label>
+              <input matInput [(ngModel)]="materia.nrc" name="nrc" placeholder="Ej. 25550" [disabled]="editar" (keypress)="soloNumeros($event)" mask="000000">
+            </mat-form-field>
+            <div *ngIf="errors.nrc" class="invalid-feedback">{{ errors.nrc }}</div>
+          </div>
+        </div>
+
+        <!-- Nombre -->
+        <div class="row w-100">
+          <div class="col-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre de la Materia</mat-label>
+              <input matInput [(ngModel)]="materia.nombre" name="nombre" placeholder="Ej. Programación Web" [disabled]="editar" (keypress)="soloLetras($event)" >
+            </mat-form-field>
+            <div *ngIf="errors.nombre" class="invalid-feedback">{{ errors.nombre }}</div>
+          </div>
+        </div>
+
+        <!-- Sección -->
+        <div class="row w-100">
+          <div class="col-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Sección</mat-label>
+              <input matInput [(ngModel)]="materia.seccion" name="seccion" placeholder="Ej. 001" (keypress)="soloNumeros($event)" maxlength="3">
+            </mat-form-field>
+            <div *ngIf="errors.seccion" class="invalid-feedback">{{ errors.seccion }}</div>
+          </div>
+        </div>
+
+        <!-- Créditos -->
+        <div class="row w-100">
+          <div class="col-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Créditos</mat-label>
+              <input matInput [(ngModel)]="materia.creditos" name="creditos" placeholder="Ej. 5" (keypress)="soloNumeros($event)" maxlength="2">
+            </mat-form-field>
+            <div *ngIf="errors.creditos" class="invalid-feedback">{{ errors.creditos }}</div>
+          </div>
+        </div>
+
+        <!-- Horarios con TimePicker -->
+        <div class="row w-100">
+          <!-- Hora Inicio -->
+          <div class="col-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Hora Inicio</mat-label>
+              <input matInput [ngxTimepicker]="pickerInicio"
+                     [(ngModel)]="materia.hora_inicio"
+                     name="hora_inicio"
+                     readonly>
+              <mat-icon matSuffix (click)="pickerInicio.open()">access_time</mat-icon>
+            </mat-form-field>
+            <ngx-material-timepicker #pickerInicio [format]="24"></ngx-material-timepicker>
+            <div *ngIf="errors.hora_inicio" class="invalid-feedback">{{ errors.hora_inicio }}</div>
+          </div>
+        </div>
+
+        <div class="row w-100">
+          <!-- Hora Fin -->
+          <div class="col-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Hora Fin</mat-label>
+              <input matInput [ngxTimepicker]="pickerFin"
+                     [(ngModel)]="materia.hora_final"
+                     name="hora_final"
+                     readonly>
+              <mat-icon matSuffix (click)="pickerFin.open()">access_time</mat-icon>
+            </mat-form-field>
+            <ngx-material-timepicker #pickerFin [format]="24"></ngx-material-timepicker>
+            <div *ngIf="errors.hora_final" class="invalid-feedback">{{ errors.hora_final }}</div>
+          </div>
+        </div>
+
+        <!-- Salón -->
+        <div class="row w-100">
+          <div class="col-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Salón</mat-label>
+              <input matInput [(ngModel)]="materia.salon" name="salon" maxlength="15" placeholder="Ej. CCO-105" (keypress)="soloLetrasYNumeros($event)">
+            </mat-form-field>
+            <div *ngIf="errors.salon" class="invalid-feedback">{{ errors.salon }}</div>
+          </div>
+        </div>
+
+        <!-- Programa -->
+        <div class="row w-100">
+          <div class="col-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Programa Educativo</mat-label>
+              <mat-select [(ngModel)]="materia.programa_educativo" name="programa">
+                <mat-option *ngFor="let prog of programas" [value]="prog.value">
+                  {{ prog.viewValue }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div *ngIf="errors.programa_educativo" class="invalid-feedback">{{ errors.programa_educativo }}</div>
+          </div>
+        </div>
+
+        <!-- Profesor -->
+        <div class="row w-100">
+          <div class="col-12">
+            <mat-form-field appearance="outline">
+              <mat-label>Profesor Asignado</mat-label>
+              <mat-select [(ngModel)]="materia.profesor" name="profesor">
+                <mat-option *ngFor="let profe of listaMaestros" [value]="profe.id">
+                  {{ profe.id_trabajador }} - {{ profe.user.first_name }} {{ profe.user.last_name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div *ngIf="errors.profesor" class="invalid-feedback">{{ errors.profesor }}</div>
+          </div>
+        </div>
+
+        <!-- Días -->
+        <div class="select-materias">
+          <div class="row">
+            <div class="col-12">
+              <label class="title-materias">Selecciona los días de clase:</label>
+            </div>
+          </div>
+          <div class="checkbox-group">
+            <mat-checkbox *ngFor="let dia of diasSemana"
+                          class="checkbox-item"
+                          color="primary"
+                          [checked]="revisarSeleccion(dia)"
+                          (change)="checkboxChange($event)"
+                          [value]="dia">
+              <span class="d-checkbox-nombre">{{dia}}</span>
+            </mat-checkbox>
+          </div>
+          <div *ngIf="errors.dias" class="invalid-feedback" style="margin-left: 0; width:100%; text-align:center;">{{ errors.dias }}</div>
+        </div>
+
+        <!-- Botones -->
+        <div class="section-buttons">
+          <button class="btn btn-danger" (click)="regresar()">Cancelar</button>
+          <button *ngIf="!editar" class="btn btn-primary" (click)="registrar()">Registrar</button>
+          <button *ngIf="editar" class="btn btn-primary" (click)="actualizar()">Actualizar</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,155 @@
+/* Compensa el sidebar en desktop */
+.main-content-materias {
+  margin-left: 220px;
+  transition: margin-left 0.3s;
+  padding: 20px;
+}
+
+@media (max-width: 991px) {
+  .main-content-materias {
+    margin-left: 0;
+  }
+}
+
+.wrapper{
+  height: auto;
+}
+
+/* Encabezados usados en su HTML */
+.header-home-materias {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.body-materias {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* =========================
+   Contenedores y tabla
+   ========================= */
+.container {
+  max-width: 90vw;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.alert-primary {
+  color: #000;
+  background-color: #cfe2ff;
+  border-color: #b6d4fe;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.07);
+  width: 100%;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.alert-warning {
+  font-family: Nexa;
+  font-size: 18px;
+  color: #231F20;
+  text-align: center;
+  background: #FFF3CD;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.07);
+  width: 100%;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Scroll horizontal SOLAMENTE EN EL WRAPPER */
+.table-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Permitimos scroll solo si la tabla no cabe */
+  min-height: 1px;
+  margin: 0 auto;
+  background: var(--table-bg, #fff);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.07);
+  display: flex;
+  flex-direction: column;
+}
+
+// Estilos de la tabla
+table {
+  min-width: 100%; /* <<-- ESTO ASEGURA QUE LA TABLA NO FUERCE EL SCROLL VERTICAL */
+  width: 100%;
+  padding-bottom: 1.5rem;
+}
+
+::ng-deep .mat-mdc-table{
+  table-layout: fixed!important; /* Esto ayuda a que el ancho sea fijo */
+}
+
+// Use palette variables for table text and header
+.mat-mdc-header-cell {
+  border-bottom-color: var(--table-header-border, #231F20);
+  font-family: Nexa-Bold!important;
+  font-size: 16px; /* Reducimos la fuente para que quepa */
+  text-align: center;
+  color: var(--text-main, #fff)!important;
+}
+
+.mat-mdc-cell {
+  text-align: center;
+  font-family: Nexa!important;
+  font-size: 16px!important; /* Reducimos la fuente para que quepa */
+  color: var(--text-main, #fff)!important;
+  padding: 8px;
+}
+
+/* Títulos (saludo/rol y card) */
+.title-perfil,
+.title-table {
+  display: block;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: capitalize;
+  font-family: Nexa-Bold;
+}
+
+/* Saludo: “Bienvenido {user}” */
+.title-perfil {
+  margin-left: 3rem;
+  font-size: clamp(1.375rem, 1.1rem + 1.2vw, 2.25rem);
+  text-align: left;
+  color: #231F20;
+}
+
+/* Título de la card (alerta) */
+.title-table {
+  margin-left: 0; /* Centramos en el alert */
+  font-size: clamp(1.125rem, 0.95rem + 0.9vw, 1.875rem);
+  text-align: center;
+  color: #231F20;
+  margin: 0;
+}
+
+/* Iconos de acciones */
+.bi-pencil-square {
+  color: #0092B8;
+  cursor: pointer;
+  font-size: 1.3rem;
+}
+.bi-trash3-fill {
+  color: #E84150;
+  cursor: pointer;
+  font-size: 1.3rem;
+}
+
+/* =========================
+   Ajustes para tablets y móvil
+   ========================= */
+@media (max-width: 991px) {
+  .mat-mdc-header-cell { font-size: 14px; }
+  .mat-mdc-cell { font-size: 12px !important; }
+}
