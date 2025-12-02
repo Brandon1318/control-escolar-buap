@@ -20,7 +20,7 @@ export class RegistroUsuariosScreenComponent implements OnInit {
   public rol : string = "";
   public idUser : number = 0;
 
-  //Banderas para el tipo de usuario
+  // Banderas
   public isAdmin:boolean = false;
   public isAlumno:boolean = false;
   public isMaestro:boolean = false;
@@ -39,118 +39,112 @@ export class RegistroUsuariosScreenComponent implements OnInit {
 
   ngOnInit(): void {
     this.user.tipo_usuario = '';
-    //Obtener de la URL el rol para saber cual editar
+
+    // 1. Detección de ID
+    if(this.activatedRoute.snapshot.params['id'] != undefined){
+      this.editar = true;
+      this.idUser = this.activatedRoute.snapshot.params['id'];
+      console.log("ID User: ", this.idUser);
+    }
+
+    // 2. Detección de Rol
     if(this.activatedRoute.snapshot.params['rol'] != undefined){
       this.rol = this.activatedRoute.snapshot.params['rol'];
       console.log("Rol detectado: ", this.rol);
-
-      // Configuración de la vista según el rol
-      if(this.rol == "administrador"){
-        this.isAdmin = true;
-        this.tipo_user = "administrador";
-        this.user.tipo_usuario = "administrador";
-      } else if(this.rol == "maestros"){
-        this.isMaestro = true;
-        this.tipo_user = "maestros";
-        this.user.tipo_usuario = "maestros";
-      } else if(this.rol == "alumnos"){
-        this.isAlumno = true;
-        this.tipo_user = "alumnos";
-        this.user.tipo_usuario = "alumnos";
-      }
     }
 
-    //El if valida si existe un parámetro en la URL
-    if(this.activatedRoute.snapshot.params['id'] != undefined){
-      this.editar = true;
-      //Asignamos a nuestra variable global el valor del ID que viene por la URL
-      this.idUser = this.activatedRoute.snapshot.params['id'];
-      console.log("ID User: ", this.idUser);
-      //Al iniciar la vista obtiene el usuario por su ID
-      this.obtenerUserByID();
+    // 3. Decisión de carga:
+    // Si es edicion, pedimos los datos primero y las banderas se activarán cuando lleguen en obtenerUserByID
+    if(this.editar){
+       this.obtenerUserByID();
+    } else {
+       // Si es un registro nuevo, activamos las banderas inmediatamente para mostrar el formulario vacío
+       this.activarFormularioPorRol();
     }
   }
 
-  //Obtener usuario por ID
+  //activa el formulario correcto
+  public activarFormularioPorRol() {
+    if(this.rol == "administrador"){
+      this.isAdmin = true;
+      this.tipo_user = "administrador";
+      this.user.tipo_usuario = "administrador";
+    } else if(this.rol == "maestros"){
+      this.isMaestro = true;
+      this.tipo_user = "maestros";
+      this.user.tipo_usuario = "maestros";
+    } else if(this.rol == "alumnos"){
+      this.isAlumno = true;
+      this.tipo_user = "alumnos";
+      this.user.tipo_usuario = "alumnos";
+    }
+  }
+
   public obtenerUserByID() {
-    console.log("Obteniendo usuario de tipo: ", this.rol, " con ID: ", this.idUser);
-      //Aquí se haría la llamada al servicio correspondiente según el rol
-      if(this.rol == "administrador"){
-        this.administradoresService.obtenerAdminPorID(this.idUser).subscribe(
-          (response) => {
-            this.user = response;
-            console.log("Usuario original obtenido: ", this.user);
-            // Asignar datos, soportando respuesta plana o anidada
-            this.user.first_name = response.user?.first_name || response.first_name;
-            this.user.last_name = response.user?.last_name || response.last_name;
-            this.user.email = response.user?.email || response.email;
-            this.user.tipo_usuario = this.rol;
-            this.isAdmin = true;
-          }, (error) => {
-            console.log("Error: ", error);
-            alert("No se pudo obtener el administrador seleccionado");
-          }
-        );
-      }else if(this.rol == "maestros"){
-        // TODO: Implementar lógica para obtener maestro por ID
-        this.maestrosService.obtenerMaestroPorID(this.idUser).subscribe(
-          (response) => {
-            this.user = response;
-            console.log("Usuario original obtenido: ", this.user);
-            // Mapeamos los de datos
-            this.user.first_name = response.user?.first_name || response.first_name;
-            this.user.last_name = response.user?.last_name || response.last_name;
-            this.user.email = response.user?.email || response.email;
-            this.user.tipo_usuario = this.rol;
-            this.isMaestro = true;
-          }, (error) => {
-            console.log("Error: ", error);
-            alert("No se pudo obtener el maestro seleccionado");
-          }
-        )
-      }else if(this.rol == "alumnos"){
-        // TODO: Implementar lógica para obtener alumno por ID
-        this.alumnosService.obtenerAlumnoPorID(this.idUser).subscribe(
-          (response) => {
-            this.user = response;
-            console.log("Usuario original obtenido: ", this.user);
-            // Mapeamos los de datos
-            this.user.first_name = response.user?.first_name || response.first_name;
-            this.user.last_name = response.user?.last_name || response.last_name;
-            this.user.email = response.user?.email || response.email;
-            this.user.tipo_usuario = this.rol;
-            this.isAlumno = true;
-            }, (error) => {
-              console.log("Error: ", error);
-            alert("No se pudo obtener el alumno seleccionado");
-            }
-        )
+    console.log("Obteniendo usuario: ", this.rol, this.idUser);
+    if(this.rol == "administrador"){
+      this.administradoresService.obtenerAdminPorID(this.idUser).subscribe(
+        (response) => {
+          this.user = response;
+          this.user.first_name = response.user?.first_name || response.first_name;
+          this.user.last_name = response.user?.last_name || response.last_name;
+          this.user.email = response.user?.email || response.email;
+          this.user.tipo_usuario = this.rol;
+
+          //se activa la bandera y el tipo, cuando ya tenemos los datos
+          this.tipo_user = "administrador";
+          this.isAdmin = true;
+        }, (error) => { alert("Error al obtener admin"); }
+      );
+    } else if(this.rol == "maestros"){
+      this.maestrosService.obtenerMaestroPorID(this.idUser).subscribe(
+        (response) => {
+          this.user = response;
+          this.user.first_name = response.user?.first_name || response.first_name;
+          this.user.last_name = response.user?.last_name || response.last_name;
+          this.user.email = response.user?.email || response.email;
+          this.user.tipo_usuario = this.rol;
+
+          //se activa la bandera y el tipo, cuando ya tenemos los datos
+          this.tipo_user = "maestros";
+          this.isMaestro = true;
+        }, (error) => { alert("Error al obtener maestro"); }
+      );
+    } else if(this.rol == "alumnos"){
+      this.alumnosService.obtenerAlumnoPorID(this.idUser).subscribe(
+        (response) => {
+          this.user = response;
+          this.user.first_name = response.user?.first_name || response.first_name;
+          this.user.last_name = response.user?.last_name || response.last_name;
+          this.user.email = response.user?.email || response.email;
+          this.user.tipo_usuario = this.rol;
+
+          //se activa la bandera y el tipo, cuando ya tenemos los datos
+          this.tipo_user = "alumnos";
+          this.isAlumno = true;
+        }, (error) => { alert("Error al obtener alumno"); }
+      );
     }
   }
 
   public radioChange(event: MatRadioChange) {
-    console.log(event);
+    this.isAdmin = false;
+    this.isAlumno = false;
+    this.isMaestro = false;
+
     if(event.value == "administrador"){
       this.isAdmin = true;
-      this.isAlumno = false;
-      this.isMaestro = false;
       this.tipo_user = "administrador";
-    }else if (event.value == "alumnos"){
-      this.isAdmin = false;
+    } else if (event.value == "alumnos"){
       this.isAlumno = true;
-      this.isMaestro = false;
       this.tipo_user = "alumnos";
-    }else if (event.value == "maestros"){
-      this.isAdmin = false;
-      this.isAlumno = false;
+    } else if (event.value == "maestros"){
       this.isMaestro = true;
       this.tipo_user = "maestros";
     }
   }
 
-  //Función para regresar a la pantalla anterior
   public goBack() {
     this.location.back();
   }
-
 }
