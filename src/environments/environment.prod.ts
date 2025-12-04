@@ -1,4 +1,4 @@
 export const environment = {
-  production: true
-
+  production: true,
+  url_api: "https://control-escolar-buap-api.onrender.com"
 };
